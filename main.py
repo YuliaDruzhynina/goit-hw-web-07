@@ -1,3 +1,12 @@
+from sqlalchemy import desc, func
+from connect_db import session
+from model import Student, Teacher, Group, Subject, Grade
+
+
+if __name__ == '__main__':
+    q = session.query(Group.id, Group.group_name, Student.id, func.round(func.avg(Grade.grade), 2).label('avg_grade')) \
+        .select_from(Grade).join(Student).join(Group).join(Subject).group_by(Group.group_name).all()
+    print(q)
 
     # session.query(Student.fullname, func.round(func.avg(Grade.grade), 2).label('avg_grade')) \
     #     .select_from(Grade).join(Student).group_by(Student.id).order_by(desc(Grade.grade)).limit(5).all()
